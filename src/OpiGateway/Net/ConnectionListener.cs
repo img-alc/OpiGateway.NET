@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace OpiGateway.Net
         private const int TeardownDelayMs = 4000; //TODO configurable
         
         private readonly TcpListener listener;
+        private bool listening;
         
         private readonly object sync = new object();
         private readonly IList<Task> connections = new List<Task>(); //TODO connection registry
@@ -32,7 +34,8 @@ namespace OpiGateway.Net
         public async Task StartListener()
         {
             listener.Start();
-            while (true)
+            listening = true;
+            while (listening)
             {
                 var tcpClient = await listener.AcceptTcpClientAsync();
                 var task = RegisterConnectionAsync(tcpClient);
@@ -60,6 +63,10 @@ namespace OpiGateway.Net
             catch (Exception)
             {
                 //TODO log?
+            }
+            finally
+            {
+                listening = false;
             }
         }
         

@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpiGateway", "OpiGateway\OpiGateway.csproj", "{00DF3FB9-BE9E-46AE-9498-A0691C61F3D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpiGateway.Dto", "OpiGateway.Dto\OpiGateway.Dto.csproj", "{C7B4BFA6-0816-4478-BD00-A16BDDA24D52}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpiGateway.Tests", "..\tests\OpiGateway.Tests\OpiGateway.Tests.csproj", "{5DFCF85A-90B9-4973-AC34-5ED0E5B0CD31}"
 EndProject
 Global
@@ -16,10 +14,6 @@ Global
 		{00DF3FB9-BE9E-46AE-9498-A0691C61F3D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00DF3FB9-BE9E-46AE-9498-A0691C61F3D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00DF3FB9-BE9E-46AE-9498-A0691C61F3D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C7B4BFA6-0816-4478-BD00-A16BDDA24D52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7B4BFA6-0816-4478-BD00-A16BDDA24D52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7B4BFA6-0816-4478-BD00-A16BDDA24D52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7B4BFA6-0816-4478-BD00-A16BDDA24D52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DFCF85A-90B9-4973-AC34-5ED0E5B0CD31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5DFCF85A-90B9-4973-AC34-5ED0E5B0CD31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DFCF85A-90B9-4973-AC34-5ED0E5B0CD31}.Release|Any CPU.ActiveCfg = Release|Any CPU

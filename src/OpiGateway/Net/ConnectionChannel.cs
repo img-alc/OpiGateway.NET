@@ -28,7 +28,7 @@ namespace OpiGateway.Net
         /// <param name="bufferSize">The size of the reading buffer, in bytes</param>
         /// <returns>The message read, in bytes, in the form of an asynchronous task</returns>
         /// <exception cref="Exception">If the message appears to be malformed</exception>
-        public async Task<byte[]> ReadAsync(int bufferSize = 4096)
+        public async Task<byte[]> ReadAsync(int bufferSize)
         {
             byte[] message;
             
