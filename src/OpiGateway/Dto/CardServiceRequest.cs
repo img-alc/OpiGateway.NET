@@ -11,9 +11,6 @@ namespace OpiGateway.Dto
         [XmlElement(ElementName = "PrivateData")]
         public string PrivateData { get; set; }
 
-        [XmlElement(ElementName = "ReversalReceiptNo")]
-        public string ReversalReceiptNo { get; set; }
-
         [XmlElement(ElementName = "TotalAmount")]
         public TotalAmount TotalAmount { get; set; }
 

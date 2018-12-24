@@ -84,6 +84,10 @@ namespace OpiGateway.Net
             await stream.WriteAsync(prefixed, 0, prefixed.Length);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Dispose network stream and any other managed resource
+        /// </summary>
         public void Dispose()
         {
             stream?.Dispose();
