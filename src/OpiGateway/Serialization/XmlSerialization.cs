@@ -51,7 +51,7 @@ namespace OpiGateway.Serialization
         {
             if (input == null)
             {
-                throw new NullReferenceException($"Cannot serialize NULL as {typeof(T).Name}");
+                throw new NullReferenceException($"Cannot deserialize NULL as {typeof(T).Name}");
             }
             
             T obj;

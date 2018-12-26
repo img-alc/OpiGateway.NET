@@ -9,15 +9,16 @@ namespace OpiGateway.Net
     /// <summary>
     /// A communication channel over a TCP/IP network stream
     /// </summary>
-    public class ConnectionChannel : IDisposable
+    public class ConnectionStream : IDisposable
     {
         private const int MessageLengthPrefixBytes = 4;
         private readonly NetworkStream stream;
+        private bool dispose = false; // detect redundant calls
 
         /// <summary>
         /// Instantiate a new communication channel for a given TCP/IP-based network stream
         /// </summary>
-        public ConnectionChannel(NetworkStream stream)
+        public ConnectionStream(NetworkStream stream)
         {
             this.stream = stream;
         }
@@ -86,11 +87,24 @@ namespace OpiGateway.Net
 
         /// <inheritdoc />
         /// <summary>
-        /// Dispose network stream and any other managed resource
+        /// Releases all resources used by the object.
         /// </summary>
         public void Dispose()
         {
-            stream?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources, and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">True to release both managed and unmanaged resources, false to release only unmanaged resources</param>
+        private void Dispose(bool disposing)
+        {
+            if (dispose) return;
+            if (disposing) stream?.Dispose();
+
+            dispose = true;
         }
     }
 }

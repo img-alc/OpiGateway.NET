@@ -98,7 +98,7 @@ namespace OpiGateway.Net
         {
             await Task.Yield(); // continue asynchronously on another thread
 
-            using (var channel = new ConnectionChannel(client.GetStream()))
+            using (var channel = new ConnectionStream(client.GetStream()))
             {
                 var request = await channel.ReadAsync(TcpReadBufferSize);
                 var response = new byte[] { }; //TODO actual processing
