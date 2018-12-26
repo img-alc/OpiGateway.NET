@@ -11,13 +11,17 @@ namespace OpiGateway.Tests.Serialization
         [TestMethod]
         public void Serialize_ShouldThrowNullReferenceException_WhenObjectIsNull()
         {
-            Assert.ThrowsException<NullReferenceException>(() => XmlSerialization.Serialize<CardServiceRequest>(null));
+            var ex = Assert.ThrowsException<NullReferenceException>(() => XmlSerialization.Serialize<CardServiceResponse>(null));
+            
+            Assert.AreEqual("Cannot serialize NULL for CardServiceResponse", ex.Message);
         }
 
         [TestMethod]
         public void Deserialize_ShouldThrowNullReferenceException_WhenStringIsNull()
         {
-            Assert.ThrowsException<NullReferenceException>(() => XmlSerialization.Deserialize<CardServiceResponse>(null));
+            var ex = Assert.ThrowsException<NullReferenceException>(() => XmlSerialization.Deserialize<CardServiceRequest>(null));
+            
+            Assert.AreEqual("Cannot deserialize NULL as CardServiceRequest", ex.Message);
         }
         
         [TestMethod]

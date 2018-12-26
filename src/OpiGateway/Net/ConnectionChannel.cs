@@ -9,16 +9,16 @@ namespace OpiGateway.Net
     /// <summary>
     /// A communication channel over a TCP/IP network stream
     /// </summary>
-    public class ConnectionStream : IDisposable
+    public class ConnectionChannel : IDisposable
     {
         private const int MessageLengthPrefixBytes = 4;
-        private readonly NetworkStream stream;
+        private readonly IConnectionStream stream;
         private bool dispose = false; // detect redundant calls
 
         /// <summary>
         /// Instantiate a new communication channel for a given TCP/IP-based network stream
         /// </summary>
-        public ConnectionStream(NetworkStream stream)
+        public ConnectionChannel(IConnectionStream stream)
         {
             this.stream = stream;
         }
@@ -28,7 +28,7 @@ namespace OpiGateway.Net
         /// </summary>
         /// <param name="bufferSize">The size of the reading buffer, in bytes</param>
         /// <returns>The message read, in bytes, in the form of an asynchronous task</returns>
-        /// <exception cref="Exception">If the message appears to be malformed</exception>
+        /// <exception cref="IOException">If the message appears to be malformed</exception>
         public async Task<byte[]> ReadAsync(int bufferSize)
         {
             byte[] message;
@@ -39,7 +39,7 @@ namespace OpiGateway.Net
                 var read = await stream.ReadAsync(buffer, 0, buffer.Length);
                 if (read <= MessageLengthPrefixBytes)
                 {
-                    throw new Exception("Invalid message: Not enough information to extract message length prefix");
+                    throw new IOException("Invalid message: Not enough information to extract message length prefix");
                 }
 
                 var prefix = new byte[MessageLengthPrefixBytes];
@@ -52,7 +52,7 @@ namespace OpiGateway.Net
                 var msgLength = BitConverter.ToInt32(prefix, 0);
                 if (msgLength <= 0)
                 {
-                    throw new Exception("Invalid message: Bad value for message length prefix");
+                    throw new IOException($"Invalid message: Bad value {msgLength} for message length prefix");
                 }
 
                 memory.Write(buffer, MessageLengthPrefixBytes, read - MessageLengthPrefixBytes);
@@ -75,7 +75,16 @@ namespace OpiGateway.Net
         /// <param name="message">The message to send to the client, as bytes</param>
         public async Task WriteAsync(byte[] message)
         {
+            if (message == null)
+            {
+                throw new NullReferenceException("Cannot write NULL as message");
+            }
+            
             var prefix = BitConverter.GetBytes(message.Length);
+            if (BitConverter.IsLittleEndian) // most significant byte on the right
+            {
+                Array.Reverse(prefix);
+            }
             var prefixed = new byte[message.Length + MessageLengthPrefixBytes];
             
             Array.Copy(prefix, prefixed, MessageLengthPrefixBytes);

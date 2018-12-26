@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
@@ -97,8 +96,7 @@ namespace OpiGateway.Net
         private async Task HandleConnectionAsync(TcpClient client)
         {
             await Task.Yield(); // continue asynchronously on another thread
-
-            using (var channel = new ConnectionStream(client.GetStream()))
+            using (var channel = new ConnectionChannel(new NetworkConnectionStream(client.GetStream())))
             {
                 var request = await channel.ReadAsync(TcpReadBufferSize);
                 var response = new byte[] { }; //TODO actual processing
