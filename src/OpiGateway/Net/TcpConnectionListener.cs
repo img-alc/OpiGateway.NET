@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace OpiGateway.Net
 {
     /// <summary>
-    /// Establishes and manages client connections, routes messages through communication channels
+    /// Establishes and manages TCP/IP connections, routes messages through communication channels
     /// </summary>
-    public class ConnectionListener
+    public class TcpConnectionListener
     {
         private const int TcpReadBufferSize = 4096;
         private const int TeardownDelayMs = 4000; //TODO configurable
@@ -22,7 +22,7 @@ namespace OpiGateway.Net
         /// <summary>
         /// Instantiate a new TCP/IP-based connection listener on a specific port
         /// </summary>
-        public ConnectionListener(int port)
+        public TcpConnectionListener(int port)
         {
             listener = TcpListener.Create(port);
         }
@@ -96,7 +96,7 @@ namespace OpiGateway.Net
         private async Task HandleConnectionAsync(TcpClient client)
         {
             await Task.Yield(); // continue asynchronously on another thread
-            using (var channel = new ConnectionChannel(new NetworkConnectionStream(client.GetStream())))
+            using (var channel = new TcpProtocolStream(new TcpConnectionStream(client)))
             {
                 var request = await channel.ReadAsync(TcpReadBufferSize);
                 var response = new byte[] { }; //TODO actual processing

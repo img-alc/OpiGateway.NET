@@ -1,14 +1,15 @@
 using System;
 using System.IO;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace OpiGateway.Net
 {
     /// <inheritdoc />
     /// <summary>
-    /// A wrapper over a <see cref="Stream"/>, capable of reading and writing
+    /// A wrapper over a TCP/IP network connection stream, capable of reading and writing
     /// </summary>
-    public interface IConnectionStream : IDisposable
+    public interface ITcpConnectionStream : IDisposable
     {
         /// <summary>
         /// Read a series of bytes into a byte buffer

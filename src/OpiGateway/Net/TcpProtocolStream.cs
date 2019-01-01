@@ -7,28 +7,29 @@ namespace OpiGateway.Net
 {
     /// <inheritdoc />
     /// <summary>
-    /// A communication channel over a TCP/IP network stream
+    /// A TCP/IP network connection stream capable of reading and writing OPI protocol messages
     /// </summary>
-    public class ConnectionChannel : IDisposable
+    public class TcpProtocolStream : ITcpProtocolStream
     {
         private const int MessageLengthPrefixBytes = 4;
-        private readonly IConnectionStream stream;
-        private bool dispose = false; // detect redundant calls
+        private readonly ITcpConnectionStream stream;
+        private bool dispose; // detect redundant calls
 
         /// <summary>
-        /// Instantiate a new communication channel for a given TCP/IP-based network stream
+        /// A new OPI protocol stream over a TCP/IP-based network stream
         /// </summary>
-        public ConnectionChannel(IConnectionStream stream)
+        public TcpProtocolStream(ITcpConnectionStream stream)
         {
             this.stream = stream;
         }
         
+        /// <inheritdoc />
         /// <summary>
-        /// Read a message from the network stream, as bytes
+        /// Read an OPI protocol message from the TCP/IP network stream, as bytes
         /// </summary>
         /// <param name="bufferSize">The size of the reading buffer, in bytes</param>
-        /// <returns>The message read, in bytes, in the form of an asynchronous task</returns>
-        /// <exception cref="IOException">If the message appears to be malformed</exception>
+        /// <returns>The OPI protocol message read, in bytes, in the form of an asynchronous task</returns>
+        /// <exception cref="T:System.IO.IOException">If the OPI message appears to be malformed, or invalid</exception>
         public async Task<byte[]> ReadAsync(int bufferSize)
         {
             byte[] message;
@@ -69,10 +70,11 @@ namespace OpiGateway.Net
             return message;
         }
         
+        /// <inheritdoc />
         /// <summary>
-        /// Write a message on the client communication channel
+        /// Write an OPI protocol message on the TCP/IP network stream, as bytes
         /// </summary>
-        /// <param name="message">The message to send to the client, as bytes</param>
+        /// <param name="message">The OPI message to send to the client, as bytes</param>
         public async Task WriteAsync(byte[] message)
         {
             if (message == null)

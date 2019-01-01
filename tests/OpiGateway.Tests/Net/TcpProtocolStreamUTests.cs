@@ -6,13 +6,13 @@ using OpiGateway.Net;
 namespace OpiGateway.Tests.Net
 {
     [TestClass]
-    public class ConnectionChannelUTests
+    public class TcpProtocolStreamUTests
     {   
         [TestMethod]
         public void ReadAsync_ShouldThrowIOException_WhenNotEnoughBytesMessageLengthPrefix()
         {
-            var stream = new NoOpConnectionStream(new byte[2]);
-            var channel = new ConnectionChannel(stream);
+            var stream = new NoOpTcpConnectionStream(new byte[2]);
+            var channel = new TcpProtocolStream(stream);
 
             var ex = Assert.ThrowsExceptionAsync<IOException>(() => channel.ReadAsync(4096)).Result;
             
@@ -22,8 +22,8 @@ namespace OpiGateway.Tests.Net
         [TestMethod]
         public void ReadAsync_ShouldThrowIOException_WhenMessageHasZeroLengthPrefix()
         {
-            var stream = new NoOpConnectionStream(new byte[4096]);
-            var channel = new ConnectionChannel(stream);
+            var stream = new NoOpTcpConnectionStream(new byte[4096]);
+            var channel = new TcpProtocolStream(stream);
 
             var ex = Assert.ThrowsExceptionAsync<IOException>(() => channel.ReadAsync(4096)).Result;
             
@@ -33,8 +33,8 @@ namespace OpiGateway.Tests.Net
         [TestMethod]
         public void ReadAsync_ShouldNotThrow_WhenMessageLengthPrefixGreaterThanActualMessageLength()
         {
-            var stream = new NoOpConnectionStream(new byte[] { 0, 0, 0, 4, 0, 0 });
-            var channel = new ConnectionChannel(stream);
+            var stream = new NoOpTcpConnectionStream(new byte[] { 0, 0, 0, 4, 0, 0 });
+            var channel = new TcpProtocolStream(stream);
 
             var read = channel.ReadAsync(6).Result;
             
@@ -46,8 +46,8 @@ namespace OpiGateway.Tests.Net
         [TestMethod]
         public void ReadAsync_ShouldNotTruncateMessage_WhenMessageLengthPrefixLessThanActualMessageLength()
         {
-            var stream = new NoOpConnectionStream(new byte[] { 0, 0, 0, 2, 0, 0, 0, 0 });
-            var channel = new ConnectionChannel(stream);
+            var stream = new NoOpTcpConnectionStream(new byte[] { 0, 0, 0, 2, 0, 0, 0, 0 });
+            var channel = new TcpProtocolStream(stream);
 
             var read = channel.ReadAsync(8).Result;
             
@@ -61,8 +61,8 @@ namespace OpiGateway.Tests.Net
         [TestMethod]
         public void ReadAsync_ShouldTruncateMessage_WhenBufferSizeLessThanMessageLength()
         {
-            var stream = new NoOpConnectionStream(new byte[] { 0, 0, 0, 4, 0, 0, 0, 0 });
-            var channel = new ConnectionChannel(stream);
+            var stream = new NoOpTcpConnectionStream(new byte[] { 0, 0, 0, 4, 0, 0, 0, 0 });
+            var channel = new TcpProtocolStream(stream);
 
             var read = channel.ReadAsync(6).Result;
             
@@ -74,8 +74,8 @@ namespace OpiGateway.Tests.Net
         [TestMethod]
         public void ReadAsync_ShouldReadEntireMessageWithLengthPrefix_WhenMessageExistsWithLengthPrefix()
         {
-            var stream = new NoOpConnectionStream(new byte[] { 0, 0, 0, 4, 0, 0, 0, 1 });
-            var channel = new ConnectionChannel(stream);            
+            var stream = new NoOpTcpConnectionStream(new byte[] { 0, 0, 0, 4, 0, 0, 0, 1 });
+            var channel = new TcpProtocolStream(stream);            
             
             var read = channel.ReadAsync(8).Result;
             
@@ -89,8 +89,8 @@ namespace OpiGateway.Tests.Net
         [TestMethod]
         public void WriteAsync_ShouldWriteMessageWithLengthPrefix_WhenMessageIsNotNull()
         {
-            var stream = new NoOpConnectionStream(new byte[0] /* irrelevant */);
-            var channel = new ConnectionChannel(stream);
+            var stream = new NoOpTcpConnectionStream(new byte[0] /* irrelevant */);
+            var channel = new TcpProtocolStream(stream);
 
             channel.WriteAsync(new byte[] {0, 1, 0, 1}).Wait();
 
@@ -110,8 +110,8 @@ namespace OpiGateway.Tests.Net
         [TestMethod]
         public void WriteAsync_ShouldThrowNullReferenceException_WhenMessageIsNull()
         {
-            var stream = new NoOpConnectionStream(new byte[0] /* irrelevant */);
-            var channel = new ConnectionChannel(stream);
+            var stream = new NoOpTcpConnectionStream(new byte[0] /* irrelevant */);
+            var channel = new TcpProtocolStream(stream);
 
             var ex = Assert.ThrowsExceptionAsync<NullReferenceException>(() => channel.WriteAsync(null)).Result;
 

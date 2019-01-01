@@ -11,14 +11,14 @@ namespace OpiGateway
         /// <summary>
         /// The connection listener, establishing and managing connections for clients
         /// </summary>
-        private readonly ConnectionListener listener;
+        private readonly TcpConnectionListener listener;
 
         /// <summary>
         /// Initializes the service, implementing classes have to invoke one way or another
         /// </summary>
         protected ServiceHost()
         {
-            listener = new ConnectionListener(11143); //TODO configurable
+            listener = new TcpConnectionListener(11143); //TODO configurable
         }
         
         /// <summary>

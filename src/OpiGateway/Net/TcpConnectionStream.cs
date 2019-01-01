@@ -8,18 +8,19 @@ namespace OpiGateway.Net
     /// <summary>
     /// A TCP/IP-based, <see cref="Socket"/>-powered connection network stream
     /// </summary>
-    public class NetworkConnectionStream : IConnectionStream
+    public class TcpConnectionStream : ITcpConnectionStream
     {
-        private readonly NetworkStream stream;
-        private bool dispose = false; // detect redundant calls
+        private readonly TcpClient client;
+        private NetworkStream stream;
+        private bool dispose; // detect redundant calls
 
         /// <summary>
-        /// Instantiate a new connection stream from a <see cref="NetworkStream"/>
+        /// Instantiate a new connection stream from a <see cref="TcpClient"/>
         /// </summary>
-        /// <param name="stream">An already active <see cref="NetworkStream"/></param>
-        public NetworkConnectionStream(NetworkStream stream)
+        /// <param name="client">An already connected <see cref="TcpClient"/></param>
+        public TcpConnectionStream(TcpClient client)
         {
-            this.stream = stream;
+            this.client = client;
         }
 
         /// <inheritdoc />
@@ -32,7 +33,7 @@ namespace OpiGateway.Net
         /// <returns>The number of bytes read, in the form of an asynchronous <see cref="Task"/></returns>
         public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
         {
-            return await stream.ReadAsync(buffer, offset, count);
+            return await (stream ?? (stream = client.GetStream())).ReadAsync(buffer, offset, count);
         }
 
         /// <inheritdoc />
@@ -45,7 +46,7 @@ namespace OpiGateway.Net
         /// <returns>Nothing, as an asynchronous <see cref="Task" /></returns>
         public async Task WriteAsync(byte[] buffer, int offset, int count)
         {
-            await stream.WriteAsync(buffer, offset, count);
+            await (stream ?? (stream = client.GetStream())).WriteAsync(buffer, offset, count);
         }
 
         /// <inheritdoc />

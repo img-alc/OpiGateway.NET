@@ -6,9 +6,9 @@ namespace OpiGateway.Tests.Net
 {
     /// <inheritdoc />
     /// <summary>
-    /// A fake, mock implementation of a <see cref="IConnectionStream"/>, which does basically nothing
+    /// A fake, mock implementation of a <see cref="ITcpConnectionStream"/>, which does basically nothing
     /// </summary>
-    public class NoOpConnectionStream : IConnectionStream
+    public class NoOpTcpConnectionStream : ITcpConnectionStream
     {
         /// <summary>
         /// A specific set of bytes to be returned every time a read is requested
@@ -24,7 +24,7 @@ namespace OpiGateway.Tests.Net
         /// Instantiated with a specific set of bytes to be returned every time a read is requested
         /// </summary>
         /// <param name="input">The byte sequence to return every time a read is requested</param>
-        public NoOpConnectionStream(byte[] input)
+        public NoOpTcpConnectionStream(byte[] input)
         {
             this.input = input;
         }
@@ -72,6 +72,7 @@ namespace OpiGateway.Tests.Net
         /// </summary>
         public void Dispose()
         {
+            // nothing to dispose
         }
     }
 }
