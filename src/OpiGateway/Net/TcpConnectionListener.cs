@@ -96,12 +96,12 @@ namespace OpiGateway.Net
         private async Task HandleConnectionAsync(TcpClient client)
         {
             await Task.Yield(); // continue asynchronously on another thread
-            using (var channel = new TcpProtocolStream(new TcpConnectionStream(client)))
+            using (var stream = new TcpProtocolStream(new TcpConnectionStream(client)))
             {
-                var request = await channel.ReadAsync(TcpReadBufferSize);
+                var request = await stream.ReadAsync(TcpReadBufferSize);
                 var response = new byte[] { }; //TODO actual processing
 
-                await channel.WriteAsync(response);
+                await stream.WriteAsync(response);
             }
         }
     }
