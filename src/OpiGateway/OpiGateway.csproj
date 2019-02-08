@@ -4,4 +4,8 @@
         <TargetFramework>netcoreapp2.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\OpiGateway.Dto\OpiGateway.Dto.csproj" />
+    </ItemGroup>
+
 </Project>
