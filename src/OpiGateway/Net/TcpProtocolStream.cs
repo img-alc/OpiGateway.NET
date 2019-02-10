@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace OpiGateway.Net
@@ -13,7 +12,7 @@ namespace OpiGateway.Net
     {
         private const int MessageLengthPrefixBytes = 4;
         private readonly ITcpConnectionStream stream;
-        private bool dispose; // detect redundant calls
+        private bool disposed; // detect redundant calls
 
         /// <summary>
         /// A new OPI protocol stream over a TCP/IP-based network stream
@@ -112,10 +111,10 @@ namespace OpiGateway.Net
         /// <param name="disposing">True to release both managed and unmanaged resources, false to release only unmanaged resources</param>
         private void Dispose(bool disposing)
         {
-            if (dispose) return;
+            if (disposed) return;
             if (disposing) stream?.Dispose();
 
-            dispose = true;
+            disposed = true;
         }
     }
 }

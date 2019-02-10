@@ -12,7 +12,7 @@ namespace OpiGateway.Net
     {
         private readonly TcpClient client;
         private NetworkStream stream;
-        private bool dispose; // detect redundant calls
+        private bool disposed; // detect redundant calls
 
         /// <summary>
         /// Instantiate a new connection stream from a <see cref="TcpClient"/>
@@ -65,10 +65,10 @@ namespace OpiGateway.Net
         /// <param name="disposing">True to release both managed and unmanaged resources, false to release only unmanaged resources</param>
         private void Dispose(bool disposing)
         {
-            if (dispose) return;
+            if (disposed) return;
             if (disposing) stream?.Dispose();
 
-            dispose = true;
+            disposed = true;
         }
     }
 }
